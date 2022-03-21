@@ -21,12 +21,27 @@ while True:
   t = sense.get_temperature()
   p = sense.get_pressure()
   h = sense.get_humidity()
+
+
+  # convert units
+  # C to Kelvin
+  t = t + 273.15
+  # millibar to pascal
+  p = p * 100
+
+  ## Paths
+  # Temp Path
+  t_path = "environment.inside.temperature"
+  # pressure path
+  p_path = "environment.inside.pressure"
+  # humidity path
+  h_path = "environment.inside.relativeHumidity"
   
   # Create the message
   # str() converts the value to a string so it can be concatenated
   #message = "Temperature: " + str(t) + " Pressure: " + str(p) + " Humidity: " + str(h)
   
-  signalk = '{"updates":[{"$source":"RaspiSenseHAT.Environment","timestamp":"'+ str(datetime.now()) +'","values":[{"path":"environment.temperature","value": '+ str(t) +'},{"path":"environment.relativeHumidity","value": '+ str(h) +'},{"path":"environment.pressure","value": '+ str(p) +'}]}]}'
+  signalk = '{"updates":[{"$source":"RaspiSenseHAT.Environment","timestamp":"'+ str(datetime.now()) +'","values":[{"path":"' + t_path + '","value": '+ str(t) +'},{"path":"' + h_path + '","value": '+ str(h) +'},{"path":"' + p_path + '","value": '+ str(p) +'}]}]}'
 
   # Display the scrolling message
   #print(signalk)
