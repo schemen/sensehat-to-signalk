@@ -6,8 +6,8 @@ from sense_hat import SenseHat
 from datetime import datetime
 
 ## CONFIG
-port = 30330
-tick = 1 # In seconds
+port = 1337
+tick = 5 # In seconds
 
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -26,7 +26,7 @@ while True:
   # str() converts the value to a string so it can be concatenated
   #message = "Temperature: " + str(t) + " Pressure: " + str(p) + " Humidity: " + str(h)
   
-  signalk = '{"updates":[{"$source":"RaspiSenseHAT.Environment","timestamp":"'+ str(datetime.now()) +'","values":[{"path":"environment.0.temperature","value": '+ str(t) +'},{"path":"environment.0.relativeHumidity","value": '+ str(h) +'},{"path":"environment.0.pressure","value": '+ str(p) +'}]}]}'
+  signalk = '{"updates":[{"$source":"RaspiSenseHAT.Environment","timestamp":"'+ str(datetime.now()) +'","values":[{"path":"environment.temperature","value": '+ str(t) +'},{"path":"environment.relativeHumidity","value": '+ str(h) +'},{"path":"environment.pressure","value": '+ str(p) +'}]}]}'
 
   # Display the scrolling message
   #print(signalk)
