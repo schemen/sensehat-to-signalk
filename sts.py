@@ -7,11 +7,11 @@ from datetime import datetime
 
 ## CONFIG
 port = 1337
-tick = 5 # In seconds
+tick = 1 # In seconds
+debug = False
 
-
+# Bootstrapping sensor
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
 sense = SenseHat()
 sense.clear()
 
@@ -23,7 +23,7 @@ while True:
   h = sense.get_humidity()
 
 
-  # convert units
+  # convert units to SignalK standards
   # C to Kelvin
   t = t + 273.15
   # millibar to pascal
@@ -38,12 +38,11 @@ while True:
   h_path = "environment.inside.relativeHumidity"
   
   # Create the message
-  # str() converts the value to a string so it can be concatenated
-  #message = "Temperature: " + str(t) + " Pressure: " + str(p) + " Humidity: " + str(h)
-  
   signalk = '{"updates":[{"$source":"RaspiSenseHAT.Environment","timestamp":"'+ str(datetime.now()) +'","values":[{"path":"' + t_path + '","value": '+ str(t) +'},{"path":"' + h_path + '","value": '+ str(h) +'},{"path":"' + p_path + '","value": '+ str(p) +'}]}]}'
 
-  # Display the scrolling message
-  #print(signalk)
+  if debug:
+    print(signalk)
+
+  # Send message via UDP
   sock.sendto(signalk.encode('utf-8'), ('127.0.0.1', port))
   sleep(tick)
